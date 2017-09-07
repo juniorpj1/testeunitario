@@ -6,7 +6,7 @@ public class Lance {
 	
 	private Double valor;
 	
-	public Lance(Usuario joao, double valor) {
+	public Lance(Usuario usuario, double valor) {
 		this.usuario = usuario;
 		this.valor = valor;
 	}

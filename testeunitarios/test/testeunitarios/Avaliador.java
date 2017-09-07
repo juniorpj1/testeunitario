@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import org.junit.Test;
 
 public class Avaliador {
 
@@ -12,6 +13,10 @@ public class Avaliador {
 	private List<Lance> maiores;
 
 	public void avalia(Leilao leilao) {
+		// lançando a exceção
+		if (leilao.getLances().size() == 0)
+			throw new RuntimeException("Não é possível avaliar um leilao sem lances");
+
 		for (Lance lance : leilao.getLances()) {
 			if (lance.getValor() > maiorDeTodos) {
 				maiorDeTodos = lance.getValor();
@@ -22,18 +27,13 @@ public class Avaliador {
 			}
 
 			pegaOsMaioresNo(leilao);
-
-			// else if(lance.getValor() < menorDeTodos) {
-			// menorDeTodos = lance.getValor();
-			// }
-
 		}
 	}
 
 	private void pegaOsMaioresNo(Leilao leilao) {
-		
+
 		maiores = new ArrayList<Lance>(leilao.getLances());
-		
+
 		Collections.sort(maiores, new Comparator<Lance>() {
 			public int compare(Lance o1, Lance o2) {
 				if (o1.getValor() < o2.getValor())
@@ -43,17 +43,20 @@ public class Avaliador {
 				return 0;
 			}
 		});
-		
-		maiores = maiores.subList(0,
-				maiores.size() > 3 ? 3 : maiores.size()
-				);
-		// maiores = maiores.subList(0, 3);
+
+		maiores = maiores.subList(0, maiores.size() > 3 ? 3 : maiores.size());
 
 	}
-	
+
+	@Test(expected = RuntimeException.class)
+	public void naoDeveAvaliarLeiloesSemNenhumLanceDado() {
+		@SuppressWarnings("unused")
+		Leilao leilao = new CriadorDeLeilao().para("Playstation 3 Novo").constroi();
+	}
+
 	public List<Lance> getTresMaiores() {
 		return this.maiores;
-		}
+	}
 
 	public double getMaiorLance() {
 		return maiorDeTodos;
